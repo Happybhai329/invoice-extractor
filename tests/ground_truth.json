@@ -1,0 +1,272 @@
+{
+  "6934.pdf": {
+    "supplier_name": "Balaji Malts Private Limited",
+    "supplier_address": "Plot No E-280, NU-4,Sapna Nagar,Gandhidham,Kachchh, Gandhidham, - 370203",
+    "supplier_tax_id": "24AACCB2151L1ZY",
+    "supplier_email": "balajimpl@gmail.com",
+    "supplier_phone": null,
+    "customer_name": "Sanmati Coal & Cokes Private Limited",
+    "customer_address": "B 507, Synergy Opp Commerce House NR Vodaphone Corporate Road, Prahalad Nagar Ahmedabad (Gujarat) PIN 380015",
+    "customer_tax_id": "24AARCS6957L1ZG",
+    "invoice_number": "GJ/TR/006934",
+    "invoice_date": "2025-07-06",
+    "due_date": "2025-07-13",
+    "purchase_order_number": "VERBAL",
+    "payment_terms": "7 Days",
+    "currency": "INR",
+    "document_type": "TAX INVOICE",
+    "subtotal": 186806.00,
+    "tax_amount": 9340.30,
+    "grand_total": 214514.00,
+    "line_items": [
+      {
+        "description": "Steam Coal",
+        "code": "27011920",
+        "quantity": 40.61,
+        "unit_of_measure": "MT",
+        "unit_price": 4600.00,
+        "total": 186806.00
+      }
+    ]
+  },
+  "GJ03BV6630.pdf": {
+    "supplier_name": "AGARWAL COAL CORPORATION PVT. LTD.",
+    "supplier_address": "202, IInd, Anmol Business Center, Darpan Six Roads Opposit Neeldeep Tower Navrangpura Ahmedabad, 380014,India",
+    "supplier_tax_id": "24AACCA8468K1ZD",
+    "supplier_email": "ahmedabad@agarwalcoal.com",
+    "supplier_phone": "07926463671",
+    "customer_name": "Sanmati Coal and Cokes Pvt.Ltd.",
+    "customer_address": "B 507, SYNERGY OPP COMMERCE HOUSE NR VODAPHONE CORPORATE ROAD PRAHLAD NAGAR Ahmedabad 380015",
+    "customer_tax_id": "24AARCS6957L1ZG",
+    "invoice_number": "NV1125011666",
+    "invoice_date": "2025-08-05",
+    "due_date": null,
+    "purchase_order_number": null,
+    "payment_terms": null,
+    "currency": "INR",
+    "document_type": "Tax Invoice",
+    "subtotal": 245396.40,
+    "tax_amount": 12269.82,
+    "grand_total": 277820.92,
+    "line_items": [
+      {
+        "description": "Imported Coal",
+        "code": "270119",
+        "quantity": 43.51,
+        "unit_of_measure": "MT",
+        "unit_price": 5640.00,
+        "total": 245396.40
+      }
+    ]
+  },
+  "INVOICE3715.pdf": {
+    "supplier_name": "GREEN GOLD GLOBAL RESOURCES PVT. LTD.",
+    "supplier_address": "212, Luxuria Trade Hub, Near VR Mall, New Magdalla, Surat - 394518",
+    "supplier_tax_id": "24AAICG5558N1Z2",
+    "supplier_email": null,
+    "supplier_phone": null,
+    "customer_name": "SANMATI COAL & COKES PVT LTD.",
+    "customer_address": "B - 507,Synergy Tower, Corporate Road,Prahlad Nagar, City : Ahmedabad, Pin : 380015 State : Gujarat",
+    "customer_tax_id": "24AARCS6957L1ZG",
+    "invoice_number": "GGLSUK022305172",
+    "invoice_date": "2024-02-08",
+    "due_date": "2024-02-08",
+    "purchase_order_number": "463 SUNNY ROYAL",
+    "payment_terms": null,
+    "currency": "INR",
+    "document_type": "TAX INVOICE",
+    "subtotal": 351280.00,
+    "tax_amount": 17564.00,
+    "grand_total": 390273.00,
+    "line_items": [
+      {
+        "description": "Imported Coal",
+        "code": "27011920",
+        "quantity": 43.91,
+        "unit_of_measure": "MT",
+        "unit_price": 8000.00,
+        "total": 351280.00
+      }
+    ]
+  },
+  "Invoice_VGIL2526ND1798.pdf": {
+    "supplier_name": "VASUKI GLOBAL INDUSTRIES LIMITED",
+    "supplier_address": "NAVLAKHI PORT",
+    "supplier_tax_id": "24AAFCV6687A1Z9",
+    "supplier_email": null,
+    "supplier_phone": null,
+    "customer_name": "SANMATI COAL AND COKES PVT LTD",
+    "customer_address": "B 507, SYNERGY OPP COMM. HOUSE NR VODAPHONE CORPO. ROAD, PRAHLAD NAGAR, AHMEDABAD - 380015",
+    "customer_tax_id": "24AARCS6957L1ZG",
+    "invoice_number": "VGIL2526ND1798",
+    "invoice_date": "2025-05-03",
+    "due_date": null,
+    "purchase_order_number": null,
+    "payment_terms": null,
+    "currency": "INR",
+    "document_type": "Tax Invoice",
+    "subtotal": 195415.00,
+    "tax_amount": 9770.76,
+    "grand_total": 223858.00,
+    "line_items": [
+      {
+        "description": "INDONESIAN STEAM COAL",
+        "code": "27011920",
+        "quantity": 41.14,
+        "unit_of_measure": "MTS",
+        "unit_price": 4750.00,
+        "total": 195415.00
+      }
+    ]
+  },
+  "SalesBill_GT_5776.PDF": {
+    "supplier_name": "ANGEL RESOURCES PRIVATE LIMITED",
+    "supplier_address": "OFFICE NO.711, R K WORLD TOWER, 150 FT RING ROAD, RAJKOT-360006",
+    "supplier_tax_id": "24ABBCA6392E1ZU",
+    "supplier_email": null,
+    "supplier_phone": null,
+    "customer_name": "Sanmati Coal & Cokes Private Limited",
+    "customer_address": "B 507,SYNERGY OPP COMMERCE HOUSE NR VODAPHONE AHMEDABAD, Ahmedabad - 380015",
+    "customer_tax_id": "24AARCS6957L1ZG",
+    "invoice_number": "GT/5776",
+    "invoice_date": "2025-08-13",
+    "due_date": null,
+    "purchase_order_number": null,
+    "payment_terms": null,
+    "currency": "INR",
+    "document_type": "TAX INVOICE",
+    "subtotal": 191493.75,
+    "tax_amount": 9574.68,
+    "grand_total": 220762.00,
+    "line_items": [
+      {
+        "description": "Imported Coal",
+        "code": "27011920",
+        "quantity": 43.77,
+        "unit_of_measure": "MT",
+        "unit_price": 4375.00,
+        "total": 191493.75
+      }
+    ]
+  },
+  "Sales_2775 SANMAT.pdf": {
+    "supplier_name": "HONESTFALCON RESOURCES PVT LTD (JAMNAGAR)",
+    "supplier_address": "R.S 78/3, Plot No .58,59,60,61,Khijadiya Highway, Landmark.- Oppsite Suraj Cotton Mill, Jamnagar,Gujarat-361007",
+    "supplier_tax_id": "24AAGCH8484E1ZF",
+    "supplier_email": "honestfalconresources5@gmail.com",
+    "supplier_phone": null,
+    "customer_name": "SANMATI COAL & COKES PRIVATE LIMITED",
+    "customer_address": "B 507, SYNERGY OPP COMMERCE HOUSE, NR VODAPHONE CORPORATE ROAD, PRAHLAD NAGAR AHMEDABAD, Gujarat 380015",
+    "customer_tax_id": "24AARCS6957L1ZG",
+    "invoice_number": "2775",
+    "invoice_date": "2025-06-01",
+    "due_date": null,
+    "purchase_order_number": null,
+    "payment_terms": null,
+    "currency": "INR",
+    "document_type": "TAX INVOICE",
+    "subtotal": 201600.00,
+    "tax_amount": 10080.00,
+    "grand_total": 231896.00,
+    "line_items": [
+      {
+        "description": "Imported Coal (Indonesia)",
+        "code": "27011920",
+        "quantity": 44.80,
+        "unit_of_measure": "MTS",
+        "unit_price": 4500.00,
+        "total": 201600.00
+      }
+    ]
+  },
+  "highlighted.pdf": {
+    "supplier_name": "GREEN GOLD GLOBAL RESOURCES PVT. LTD.",
+    "supplier_address": "212, Luxuria Trade Hub, Near VR Mall, New Magdalla, Surat - 394518",
+    "supplier_tax_id": "24AAICG5558N1Z2",
+    "supplier_email": null,
+    "supplier_phone": null,
+    "customer_name": "SANMATI COAL & COKES PVT LTD.",
+    "customer_address": "B - 507,Synergy Tower, Corporate Road,Prahlad Nagar, City : Ahmedabad, Pin : 380015 State : Gujarat",
+    "customer_tax_id": "24AARCS6957L1ZG",
+    "invoice_number": "GGLSUK022305172",
+    "invoice_date": "2024-02-08",
+    "due_date": "2024-02-08",
+    "purchase_order_number": "463 SUNNY ROYAL",
+    "payment_terms": null,
+    "currency": "INR",
+    "document_type": "TAX INVOICE",
+    "subtotal": 351280.00,
+    "tax_amount": 17564.00,
+    "grand_total": 390273.00,
+    "line_items": [
+      {
+        "description": "Imported Coal",
+        "code": "27011920",
+        "quantity": 43.91,
+        "unit_of_measure": "MT",
+        "unit_price": 8000.00,
+        "total": 351280.00
+      }
+    ]
+  },
+  "wordpress-pdf-invoice-plugin-sample.pdf": {
+    "supplier_name": "DEMO - Sliced Invoices",
+    "supplier_address": "Suite 5A-1204, 123 Somewhere Street, Your City AZ 12345",
+    "supplier_tax_id": null,
+    "supplier_email": "admin@slicedinvoices.com",
+    "supplier_phone": null,
+    "customer_name": "Test Business",
+    "customer_address": "123 Somewhere St, Melbourne, VIC 3000",
+    "customer_tax_id": null,
+    "invoice_number": "INV-3337",
+    "invoice_date": "2016-01-25",
+    "due_date": "2016-01-31",
+    "purchase_order_number": "12345",
+    "payment_terms": "Within 30 days",
+    "currency": "AUD",
+    "document_type": "Invoice",
+    "subtotal": 85.00,
+    "tax_amount": 8.50,
+    "grand_total": 93.50,
+    "line_items": [
+      {
+        "description": "Web Design - This is a sample description...",
+        "code": null,
+        "quantity": 1.0,
+        "unit_of_measure": null,
+        "unit_price": 85.00,
+        "total": 85.00
+      }
+    ]
+  },
+  "64196_20260224.pdf": {
+    "supplier_name": "Jacobi-Doyle",
+    "supplier_address": "Pauline Wuckert, Gabe Fords 288, 49687-2927 Juanamouth",
+    "supplier_tax_id": "EN256036478",
+    "supplier_email": "lora.hermann@harvey.info",
+    "supplier_phone": "+1 (831) 895-4357",
+    "customer_name": "Kertzmann, Wintheiser and Beier",
+    "customer_address": "Magdalen Kreiger, Ankunding Plain 509, 91838-7229 Kosshaven, Benin",
+    "customer_tax_id": null,
+    "invoice_number": "64196",
+    "invoice_date": "2026-02-24",
+    "due_date": null,
+    "purchase_order_number": "7232763",
+    "payment_terms": "7 days",
+    "currency": "USD",
+    "document_type": "INVOICE",
+    "subtotal": 43892.01,
+    "tax_amount": 3950.28,
+    "grand_total": 47842.29,
+    "line_items": [
+      {
+        "description": "Vero illum.",
+        "code": null,
+        "quantity": 42.0,
+        "unit_of_measure": "Pcs.",
+        "unit_price": 713.81,
+        "total": 29980.02
+      }
+    ]
+  }
+}

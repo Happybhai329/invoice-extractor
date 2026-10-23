@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universal Invoice Data Extraction System</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --radius: 10px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        body { background-color: var(--bg); color: var(--text-main); line-height: 1.5; padding: 24px; }
+        .container { max-width: 1200px; margin: 0 auto; }
+
+        header { margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; }
+        h1 { font-size: 1.6rem; font-weight: 700; color: #1e293b; }
+        p.subtitle { color: var(--text-muted); font-size: 0.95rem; }
+
+        .badge { display: inline-flex; align-items: center; padding: 4px 10px; border-radius: 9999px; font-size: 0.8rem; font-weight: 600; }
+        .badge-success { background: #dcfce7; color: #15803d; }
+        .badge-warning { background: #fef3c7; color: #b45309; }
+        .badge-info { background: #e0f2fe; color: #0369a1; }
+
+        .card { background: var(--card-bg); border-radius: var(--radius); border: 1px solid var(--border); box-shadow: 0 1px 3px rgba(0,0,0,0.05); padding: 20px; margin-bottom: 20px; }
+
+        /* Upload section */
+        .upload-zone { border: 2px dashed #cbd5e1; border-radius: var(--radius); padding: 32px 20px; text-align: center; cursor: pointer; transition: all 0.2s; background: #fafafa; }
+        .upload-zone:hover, .upload-zone.dragover { border-color: var(--primary); background: #eff6ff; }
+        .upload-zone input[type="file"] { display: none; }
+        .btn { display: inline-flex; align-items: center; justify-content: center; background: var(--primary); color: #fff; border: none; padding: 8px 16px; border-radius: 6px; font-weight: 500; font-size: 0.9rem; cursor: pointer; transition: background 0.15s; text-decoration: none; }
+        .btn:hover { background: var(--primary-hover); }
+        .btn-outline { background: transparent; color: var(--primary); border: 1px solid var(--primary); }
+        .btn-outline:hover { background: #eff6ff; }
+        .btn-success { background: var(--success); }
+        .btn-success:hover { background: #059669; }
+
+        /* Demo Pills */
+        .demo-bar { margin-top: 12px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        .demo-pill { background: #e2e8f0; color: #334155; padding: 4px 10px; border-radius: 6px; font-size: 0.8rem; cursor: pointer; border: none; }
+        .demo-pill:hover { background: #cbd5e1; color: #0f172a; }
+
+        /* Grid */
+        .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; }
+        .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+
+        /* Key Metrics */
+        .stat-card { background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 14px; }
+        .stat-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 4px; }
+        .stat-value { font-size: 1.25rem; font-weight: 700; color: #0f172a; }
+
+        /* Form Inputs */
+        label { display: block; font-size: 0.85rem; font-weight: 600; color: #475569; margin-bottom: 4px; }
+        input[type="text"], input[type="number"] { width: 100%; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem; margin-bottom: 12px; }
+        input:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15); }
+
+        /* Tabs */
+        .tabs { display: flex; gap: 8px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+        .tab-btn { padding: 10px 16px; border: none; background: none; font-size: 0.95rem; font-weight: 600; color: var(--text-muted); cursor: pointer; border-bottom: 2px solid transparent; }
+        .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* Table */
+        table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 0.9rem; }
+        th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); }
+        th { background: #f1f5f9; color: #475569; font-weight: 600; }
+        tr:hover { background: #f8fafc; }
+
+        /* Warnings list */
+        .warning-box { background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px; padding: 12px 16px; margin-bottom: 16px; }
+        .warning-item { display: flex; align-items: flex-start; gap: 8px; font-size: 0.9rem; color: #92400e; margin-bottom: 6px; }
+        .warning-item:last-child { margin-bottom: 0; }
+
+        /* Raw JSON Viewer */
+        pre { background: #1e293b; color: #f8fafc; padding: 16px; border-radius: 8px; font-size: 0.85rem; overflow-x: auto; max-height: 400px; }
+
+        /* Loading Spinner */
+        .spinner { display: none; margin: 20px auto; width: 40px; height: 40px; border: 4px solid #e2e8f0; border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div>
+                <h1>Invoice Data Extraction Engine</h1>
+                <p class="subtitle">Format-Independent, Self-Normalizing PDF & OCR Document Extraction</p>
+            </div>
+            <div>
+                <a href="/docs" target="_blank" class="btn btn-outline">API Documentation</a>
+            </div>
+        </header>
+
+        <!-- Upload Card -->
+        <div class="card">
+            <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" style="margin-bottom: 8px;">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="17 8 12 3 7 8"></polyline>
+                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                </svg>
+                <p style="font-weight: 600; font-size: 1.05rem;">Click to upload or drag & drop invoice PDF</p>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">Supports digital PDFs, multi-page e-Way bills, and scanned image invoices</p>
+                <input type="file" id="fileInput" accept="application/pdf">
+            </div>
+
+            <div class="demo-bar">
+                <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted);">Quick Demo PDFs:</span>
+                <button class="demo-pill" onclick="loadDemoInvoice('64196_20260224.pdf')">64196_20260224.pdf (European EUR/USD format)</button>
+                <button class="demo-pill" onclick="loadDemoInvoice('wordpress-pdf-invoice-plugin-sample.pdf')">WordPress Sample (AUD/USD Web Design)</button>
+                <button class="demo-pill" onclick="loadDemoInvoice('6934.pdf')">6934.pdf (Balaji Malts)</button>
+                <button class="demo-pill" onclick="loadDemoInvoice('GJ03BV6630.pdf')">GJ03BV6630.pdf (Agarwal Coal)</button>
+                <button class="demo-pill" onclick="loadDemoInvoice('INVOICE3715.pdf')">INVOICE3715.pdf (Green Gold)</button>
+                <button class="demo-pill" onclick="loadDemoInvoice('Invoice_VGIL2526ND1798.pdf')">VGILND1798.pdf (Vasuki)</button>
+                <button class="demo-pill" onclick="loadDemoInvoice('SalesBill_GT_5776.PDF')">GT_5776.PDF (Angel)</button>
+                <button class="demo-pill" onclick="loadDemoInvoice('Sales_2775 SANMAT.pdf')">Sales_2775.pdf (Honestfalcon)</button>
+                <button class="demo-pill" onclick="loadDemoInvoice('highlighted.pdf')">highlighted.pdf (Scanned OCR)</button>
+            </div>
+        </div>
+
+        <div class="spinner" id="spinner"></div>
+
+        <!-- Result Container -->
+        <div id="resultContainer" style="display: none;">
+            <!-- Status Ribbon -->
+            <div class="card" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; padding: 16px 20px;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <span id="methodBadge" class="badge badge-info">Digital PDF</span>
+                    <span id="confidenceBadge" class="badge badge-success">Confidence: 98%</span>
+                    <span id="reviewBadge" class="badge badge-warning" style="display: none;">Requires Manual Review</span>
+                </div>
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn btn-outline" onclick="downloadJSON()">Download JSON</button>
+                    <button class="btn btn-success" onclick="downloadCSV()">Export Line Items CSV</button>
+                </div>
+            </div>
+
+            <!-- Warnings Area -->
+            <div id="warningsBox" class="warning-box" style="display: none;">
+                <h4 style="font-size: 0.9rem; font-weight: 700; color: #b45309; margin-bottom: 6px;">Audit & Validation Notes:</h4>
+                <div id="warningsList"></div>
+            </div>
+
+            <!-- KPI Cards -->
+            <div class="grid-4" style="margin-bottom: 20px;">
+                <div class="stat-card">
+                    <div class="stat-label">Invoice Number</div>
+                    <div class="stat-value" id="kpiInvNo">-</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Invoice Date</div>
+                    <div class="stat-value" id="kpiInvDate">-</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Subtotal</div>
+                    <div class="stat-value" id="kpiSubtotal">-</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Grand Total</div>
+                    <div class="stat-value" id="kpiGrandTotal" style="color: var(--primary);">-</div>
+                </div>
+            </div>
+
+            <!-- Tabs Navigation -->
+            <div class="card">
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="switchTab('tabFields')">Header & Financials</button>
+                    <button class="tab-btn" onclick="switchTab('tabParties')">Parties (Supplier & Buyer)</button>
+                    <button class="tab-btn" onclick="switchTab('tabItems')">Line Items (<span id="lineItemCount">0</span>)</button>
+                    <button class="tab-btn" onclick="switchTab('tabTaxes')">Tax Components</button>
+                    <button class="tab-btn" onclick="switchTab('tabDiagnostics')">Diagnostics & Audit</button>
+                    <button class="tab-btn" onclick="switchTab('tabJson')">Raw JSON Payload</button>
+                </div>
+
+                <!-- Tab 1: Header & Financials -->
+                <div id="tabFields" class="tab-content active">
+                    <div class="grid-2">
+                        <div>
+                            <h3 style="margin-bottom: 12px; font-size: 1rem;">Document Identifiers</h3>
+                            <label>Invoice Number</label>
+                            <input type="text" id="inpInvNo">
+
+                            <label>Invoice Date (ISO 8601)</label>
+                            <input type="text" id="inpInvDate">
+
+                            <label>Payment Due Date</label>
+                            <input type="text" id="inpDueDate">
+
+                            <label>Purchase Order (PO) / Order Ref</label>
+                            <input type="text" id="inpPoNo">
+
+                            <label>Payment Terms</label>
+                            <input type="text" id="inpPaymentTerms">
+                        </div>
+                        <div>
+                            <h3 style="margin-bottom: 12px; font-size: 1rem;">Financial Breakdown</h3>
+                            <label>Currency</label>
+                            <input type="text" id="inpCurrency">
+
+                            <label>Subtotal / Taxable Value</label>
+                            <input type="number" step="0.01" id="inpSubtotal" onchange="recalculateTotals()">
+
+                            <label>Total Tax Amount</label>
+                            <input type="number" step="0.01" id="inpTaxAmount" onchange="recalculateTotals()">
+
+                            <label>Additional Fees / Round Off</label>
+                            <input type="number" step="0.01" id="inpAdjustments" onchange="recalculateTotals()">
+
+                            <label>Grand Total</label>
+                            <input type="number" step="0.01" id="inpGrandTotal">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 2: Parties -->
+                <div id="tabParties" class="tab-content">
+                    <div class="grid-2">
+                        <div class="stat-card" style="background: #fff;">
+                            <h3 style="margin-bottom: 12px; font-size: 1rem; color: #1e293b;">Supplier Details</h3>
+                            <label>Supplier Legal Name</label>
+                            <input type="text" id="inpSupplierName">
+
+                            <label>Supplier Tax ID (GSTIN / PAN / VAT)</label>
+                            <input type="text" id="inpSupplierTaxId">
+
+                            <label>Supplier Address</label>
+                            <input type="text" id="inpSupplierAddress">
+
+                            <label>Supplier Email</label>
+                            <input type="text" id="inpSupplierEmail">
+
+                            <label>Supplier Phone</label>
+                            <input type="text" id="inpSupplierPhone">
+                        </div>
+
+                        <div class="stat-card" style="background: #fff;">
+                            <h3 style="margin-bottom: 12px; font-size: 1rem; color: #1e293b;">Customer (Buyer) Details</h3>
+                            <label>Customer Legal Name</label>
+                            <input type="text" id="inpCustomerName">
+
+                            <label>Customer Tax ID (GSTIN / PAN)</label>
+                            <input type="text" id="inpCustomerTaxId">
+
+                            <label>Customer Billing Address</label>
+                            <input type="text" id="inpCustomerAddress">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 3: Line Items -->
+                <div id="tabItems" class="tab-content">
+                    <table id="lineItemsTable">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Description</th>
+                                <th>HSN / Code</th>
+                                <th>Quantity</th>
+                                <th>Unit</th>
+                                <th>Unit Price</th>
+                                <th>Line Total</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lineItemsBody"></tbody>
+                    </table>
+                </div>
+
+                <!-- Tab 4: Tax Components -->
+                <div id="tabTaxes" class="tab-content">
+                    <table id="taxesTable">
+                        <thead>
+                            <tr>
+                                <th>Tax Type</th>
+                                <th>Rate (%)</th>
+                                <th>Monetary Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody id="taxesBody"></tbody>
+                    </table>
+                </div>
+
+                <!-- Tab 5: Observability & Diagnostics -->
+                <div id="tabDiagnostics" class="tab-content">
+                    <div class="grid-2" style="margin-bottom: 16px;">
+                        <div class="stat-card" style="background: #fff;">
+                            <h3 style="margin-bottom: 12px; font-size: 1rem; color: #1e293b;">Pipeline Telemetry</h3>
+                            <p style="margin-bottom: 6px; font-size: 0.9rem;"><strong>Extraction Mode:</strong> <span id="diagMethod">-</span></p>
+                            <p style="margin-bottom: 6px; font-size: 0.9rem;"><strong>Processing Time:</strong> <span id="diagTime">-</span></p>
+                            <p style="margin-bottom: 6px; font-size: 0.9rem;"><strong>Total Pages:</strong> <span id="diagPages">-</span></p>
+                            <p style="margin-bottom: 6px; font-size: 0.9rem;"><strong>Characters Extracted:</strong> <span id="diagChars">-</span></p>
+                            <p style="margin-bottom: 6px; font-size: 0.9rem;"><strong>OCR Used:</strong> <span id="diagOcr">-</span></p>
+                        </div>
+                        <div class="stat-card" style="background: #fff;">
+                            <h3 style="margin-bottom: 12px; font-size: 1rem; color: #1e293b;">Field Resolution Status</h3>
+                            <div style="margin-bottom: 10px;">
+                                <strong style="font-size: 0.85rem; color: #15803d;">Identified Fields:</strong>
+                                <div id="diagFieldsDetected" style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px;"></div>
+                            </div>
+                            <div>
+                                <strong style="font-size: 0.85rem; color: #64748b;">Missing / Optional Fields:</strong>
+                                <div id="diagFieldsMissing" style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 6: Raw JSON -->
+                <div id="tabJson" class="tab-content">
+                    <pre><code id="jsonOutput"></code></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentExtraction = null;
+
+        const uploadZone = document.getElementById('uploadZone');
+        const fileInput = document.getElementById('fileInput');
+
+        uploadZone.addEventListener('dragover', (e) => { e.preventDefault(); uploadZone.classList.add('dragover'); });
+        uploadZone.addEventListener('dragleave', () => { uploadZone.classList.remove('dragover'); });
+        uploadZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadZone.classList.remove('dragover');
+            if (e.dataTransfer.files.length > 0) {
+                processFile(e.dataTransfer.files[0]);
+            }
+        });
+
+        fileInput.addEventListener('change', () => {
+            if (fileInput.files.length > 0) {
+                processFile(fileInput.files[0]);
+            }
+        });
+
+        async function processFile(file) {
+            const formData = new FormData();
+            formData.append('file', file);
+
+            document.getElementById('spinner').style.display = 'block';
+            document.getElementById('resultContainer').style.display = 'none';
+
+            try {
+                const res = await fetch('/api/invoices/extract', {
+                    method: 'POST',
+                    body: formData
+                });
+                if (!res.ok) {
+                    const err = await res.json();
+                    alert('Extraction Error: ' + (err.detail || 'Failed to process document'));
+                    return;
+                }
+                const data = await res.json();
+                currentExtraction = data;
+                renderResults(data);
+            } catch (err) {
+                alert('Connection error: ' + err.message);
+            } finally {
+                document.getElementById('spinner').style.display = 'none';
+            }
+        }
+
+        async function loadDemoInvoice(filename) {
+            document.getElementById('spinner').style.display = 'block';
+            try {
+                let fileRes = await fetch('/api/demo-file/' + encodeURIComponent(filename));
+                if (!fileRes.ok) {
+                    fileRes = await fetch('/' + filename);
+                }
+                if (!fileRes.ok) {
+                    throw new Error(`Demo file ${filename} could not be loaded (${fileRes.status})`);
+                }
+                const blob = await fileRes.blob();
+                const file = new File([blob], filename, { type: 'application/pdf' });
+                processFile(file);
+            } catch (err) {
+                alert('Failed to load demo file: ' + err.message);
+                document.getElementById('spinner').style.display = 'none';
+            }
+        }
+
+        function renderResults(res) {
+            document.getElementById('resultContainer').style.display = 'block';
+            const inv = res.data;
+
+            // Badges
+            const methodBadge = document.getElementById('methodBadge');
+            methodBadge.textContent = res.extraction_method === 'ocr' ? 'Scanned PDF (OCR)' : 'Digital Vector PDF';
+            methodBadge.className = 'badge ' + (res.extraction_method === 'ocr' ? 'badge-warning' : 'badge-info');
+
+            const confBadge = document.getElementById('confidenceBadge');
+            const confPct = Math.round(res.confidence_score * 100);
+            confBadge.textContent = 'Confidence: ' + confPct + '%';
+            confBadge.className = 'badge ' + (confPct >= 90 ? 'badge-success' : (confPct >= 75 ? 'badge-warning' : 'badge-danger'));
+
+            const reviewBadge = document.getElementById('reviewBadge');
+            reviewBadge.style.display = res.needs_review ? 'inline-flex' : 'none';
+
+            // Warnings
+            const warningsBox = document.getElementById('warningsBox');
+            const warningsList = document.getElementById('warningsList');
+            if (res.warnings && res.warnings.length > 0) {
+                warningsBox.style.display = 'block';
+                warningsList.innerHTML = res.warnings.map(w => `<div class="warning-item">⚠️ <span>${w}</span></div>`).join('');
+            } else {
+                warningsBox.style.display = 'none';
+            }
+
+            // KPIs
+            document.getElementById('kpiInvNo').textContent = inv.invoice.invoice_number || 'N/A';
+            document.getElementById('kpiInvDate').textContent = inv.invoice.invoice_date || 'N/A';
+            document.getElementById('kpiSubtotal').textContent = formatCurrency(inv.financials.subtotal, inv.invoice.currency);
+            document.getElementById('kpiGrandTotal').textContent = formatCurrency(inv.financials.grand_total, inv.invoice.currency);
+
+            // Inputs
+            document.getElementById('inpInvNo').value = inv.invoice.invoice_number || '';
+            document.getElementById('inpInvDate').value = inv.invoice.invoice_date || '';
+            document.getElementById('inpDueDate').value = inv.invoice.due_date || '';
+            document.getElementById('inpPoNo').value = inv.invoice.purchase_order_number || '';
+            document.getElementById('inpPaymentTerms').value = inv.invoice.payment_terms || '';
+
+            document.getElementById('inpCurrency').value = inv.invoice.currency || 'INR';
+            document.getElementById('inpSubtotal').value = inv.financials.subtotal || '';
+            document.getElementById('inpTaxAmount').value = inv.financials.total_tax_amount || '';
+            document.getElementById('inpAdjustments').value = inv.financials.additional_fees || 0;
+            document.getElementById('inpGrandTotal').value = inv.financials.grand_total || '';
+
+            document.getElementById('inpSupplierName').value = inv.supplier.name || '';
+            document.getElementById('inpSupplierTaxId').value = inv.supplier.tax_id || '';
+            document.getElementById('inpSupplierAddress').value = inv.supplier.address || '';
+            document.getElementById('inpSupplierEmail').value = inv.supplier.email || '';
+            document.getElementById('inpSupplierPhone').value = inv.supplier.phone || '';
+
+            document.getElementById('inpCustomerName').value = inv.customer.name || '';
+            document.getElementById('inpCustomerTaxId').value = inv.customer.tax_id || '';
+            document.getElementById('inpCustomerAddress').value = inv.customer.billing_address || '';
+
+            // Line Items
+            document.getElementById('lineItemCount').textContent = (inv.line_items || []).length;
+            const itemsBody = document.getElementById('lineItemsBody');
+            itemsBody.innerHTML = (inv.line_items || []).map((item, idx) => `
+                <tr>
+                    <td>${idx + 1}</td>
+                    <td><strong>${item.description}</strong></td>
+                    <td><code>${item.code || '-'}</code></td>
+                    <td>${item.quantity != null ? item.quantity : '-'}</td>
+                    <td>${item.unit_of_measure || '-'}</td>
+                    <td>${item.unit_price != null ? item.unit_price.toFixed(2) : '-'}</td>
+                    <td><strong>${item.total.toFixed(2)}</strong></td>
+                </tr>
+            `).join('');
+
+            // Taxes
+            const taxesBody = document.getElementById('taxesBody');
+            taxesBody.innerHTML = (inv.financials.tax_components || []).map(t => `
+                <tr>
+                    <td><strong>${t.tax_type}</strong></td>
+                    <td>${t.rate != null ? t.rate + '%' : '-'}</td>
+                    <td>${t.amount.toFixed(2)}</td>
+                </tr>
+            `).join('');
+
+            // Diagnostics
+            if (res.diagnostics) {
+                const diag = res.diagnostics;
+                document.getElementById('diagMethod').textContent = diag.extraction_method || res.extraction_method;
+                document.getElementById('diagTime').textContent = (diag.processing_time_ms != null ? diag.processing_time_ms + ' ms' : 'N/A');
+                document.getElementById('diagPages').textContent = diag.page_count || res.page_count;
+                document.getElementById('diagChars').textContent = (diag.chars_per_page ? diag.chars_per_page.join(', ') + ' total across pages' : 'N/A');
+                document.getElementById('diagOcr').textContent = diag.is_scanned ? 'Yes (EasyOCR engine engaged)' : 'No (Native PyMuPDF digital vector text)';
+
+                const detectedEl = document.getElementById('diagFieldsDetected');
+                if (diag.fields_detected && diag.fields_detected.length > 0) {
+                    detectedEl.innerHTML = diag.fields_detected.map(f => `<span class="badge badge-success">${f}</span>`).join('');
+                } else {
+                    detectedEl.innerHTML = '<span style="color: var(--text-muted); font-size: 0.85rem;">None</span>';
+                }
+
+                const missingEl = document.getElementById('diagFieldsMissing');
+                if (diag.fields_missing && diag.fields_missing.length > 0) {
+                    missingEl.innerHTML = diag.fields_missing.map(f => `<span class="badge badge-info" style="background: #f1f5f9; color: #64748b;">${f}</span>`).join('');
+                } else {
+                    missingEl.innerHTML = '<span style="color: var(--text-muted); font-size: 0.85rem;">None (all standard fields resolved)</span>';
+                }
+            }
+
+            // JSON
+            document.getElementById('jsonOutput').textContent = JSON.stringify(res, null, 2);
+        }
+
+        function formatCurrency(val, curr) {
+            if (val == null) return '-';
+            return (curr === 'INR' ? '₹ ' : '$ ') + Number(val).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        function recalculateTotals() {
+            const sub = parseFloat(document.getElementById('inpSubtotal').value) || 0;
+            const tax = parseFloat(document.getElementById('inpTaxAmount').value) || 0;
+            const adj = parseFloat(document.getElementById('inpAdjustments').value) || 0;
+            const total = (sub + tax + adj).toFixed(2);
+            document.getElementById('inpGrandTotal').value = total;
+            document.getElementById('kpiGrandTotal').textContent = formatCurrency(total, document.getElementById('inpCurrency').value);
+        }
+
+        function downloadJSON() {
+            if (!currentExtraction) return;
+            const blob = new Blob([JSON.stringify(currentExtraction, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `invoice_${currentExtraction.data.invoice.invoice_number || 'extracted'}.json`;
+            a.click();
+        }
+
+        function downloadCSV() {
+            if (!currentExtraction || !currentExtraction.data.line_items) return;
+            const items = currentExtraction.data.line_items;
+            let csv = 'Line Number,Description,HSN/SKU,Quantity,Unit,Unit Price,Total\n';
+            items.forEach((it, idx) => {
+                csv += `"${idx + 1}","${(it.description || '').replace(/"/g, '""')}","${it.code || ''}","${it.quantity || ''}","${it.unit_of_measure || ''}","${it.unit_price || ''}","${it.total || ''}"\n`;
+            });
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `line_items_${currentExtraction.data.invoice.invoice_number || 'extracted'}.csv`;
+            a.click();
+        }
+    </script>
+</body>
+</html>

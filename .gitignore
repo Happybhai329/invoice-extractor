@@ -1,0 +1,25 @@
+# Virtual Environment
+.venv/
+venv/
+ENV/
+env/
+
+# Python Cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Testing & Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+*.log
+all_text_dump.txt
+ocr_highlighted_dump.txt
+benchmark_results.json
+
+# OS Metadata
+.DS_Store
+Thumbs.db
+ehthumbs.db
