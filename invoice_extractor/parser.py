@@ -168,6 +168,8 @@ class InvoiceParser:
             for i, l in enumerate(lines):
                 l_lower = l.lower()
                 if any(k in l_lower for k in ["invoice no", "invoice number", "bill no", "tax invoice no", "inv no", "invoice #"]):
+                    if any(k in l_lower for k in ["ack", "irn", "cancel", "payment of this invoice"]):
+                        continue
                     # Same line with value (avoid capturing 'No' or 'Number' via negative lookahead)
                     m = re.search(r"(?i)\b(?:tax\s*)?invoice\s*(?:no\.?|number|#|id)?\b\s*[:\-]?\s*(?!(?:no\.?|number|date|id)\b)([A-Za-z0-9\/\-_]+)", l)
                     if m:
@@ -175,12 +177,12 @@ class InvoiceParser:
                         if self._is_valid_id(cand):
                             return cand, FieldMetadata(raw_value=cand, normalized_value=cand, page=b.page_num, source_text=b.text, confidence=0.98)
 
-                    # Standalone label: check block directly below (spatial layout)
-                    if len(lines) == 1:
+                    # Standalone label: check block directly below (spatial layout for digital PDFs)
+                    if len(lines) == 1 and not p1.is_ocr:
                         below = sorted([b2 for b2 in p1.blocks if abs(b2.x0 - b.x0) < 40 and b2.y0 >= b.y0 and b2.y0 < b.y0 + 35 and b2 != b], key=lambda b2: b2.y0)
                         if below:
                             cand_b = below[0].text.strip()
-                            if self._is_valid_id(cand_b):
+                            if self._is_valid_id(cand_b) and not any(k in cand_b.lower() for k in ["so no", "sono", "ack", "irn"]):
                                 return cand_b, FieldMetadata(raw_value=cand_b, normalized_value=cand_b, page=b.page_num, source_text=b.text, confidence=0.98)
 
                     # Multi-line cases
@@ -207,6 +209,8 @@ class InvoiceParser:
 
         # 2. Visual lines search
         for vl in p1.visual_lines:
+            if any(k in vl.lower() for k in ["irn", "ack.", "ack no", "ack. no", "cancel", "payment of this invoice"]):
+                continue
             # Inline
             m = re.search(r"(?i)(?:tax\s*)?invoice\s*(?:no\.?|number|#|id)?\s*[:\-]?\s*(?!(?:no\.?|number|date|id)\b)([A-Za-z0-9\/\-_]+)", vl)
             if m:
@@ -251,9 +255,11 @@ class InvoiceParser:
             "invoice", "tax", "bill", "original", "duplicate", "buyer", "seller",
             "date", "dated", "verbal", "e-way", "details", "consignee", "gstin",
             "order", "receiptant", "transport", "memo", "page", "total", "supply",
-            "no", "no.", "number", "id"
+            "no", "no.", "number", "id", "ack", "ack.", "ackno", "so", "sono", "so no", "irn"
         ]
-        return not any(sw == val_clean or sw in val_clean for sw in ["date", "details", "buyer", "consignee", "gstin", "order", "receiptant", "transport", "page", "supply"]) and val_clean not in ["no", "no.", "number", "id", "#", "invoice", "bill"]
+        if val_clean in stopwords:
+            return False
+        return not any(sw in val_clean for sw in ["date", "details", "buyer", "consignee", "gstin", "order", "receiptant", "transport", "page", "supply"])
 
     # -------------------------------------------------------------------------
     # Dates
@@ -650,6 +656,10 @@ class InvoiceParser:
                 for i in range(len(nums)):
                     for j in range(len(nums)):
                         if i != j:
+                            if nums[i] < 0.01 or nums[j] < 0.01:
+                                continue
+                            if (nums[i] > 100000 and nums[i].is_integer()) or (nums[j] > 100000 and nums[j].is_integer()):
+                                continue
                             exp_val = round(nums[i] * nums[j], 2)
                             for k in range(len(nums)):
                                 if k != i and k != j and abs(exp_val - nums[k]) <= max(1.5, nums[k] * 0.02) and nums[k] > 0:
