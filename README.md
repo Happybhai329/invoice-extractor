@@ -1,5 +1,14 @@
 # Format-Independent Invoice Data Extraction System
 
+<p align="center">
+  <a href="https://github.com/Happybhai329"><img src="https://img.shields.io/badge/Author-Happy%20Bhasin-blue.svg?style=for-the-badge&logo=github" alt="Author"></a>
+  <a href="https://www.linkedin.com/in/happy-bhasin-908191267"><img src="https://img.shields.io/badge/LinkedIn-Connect-0A66C2.svg?style=for-the-badge&logo=linkedin" alt="LinkedIn"></a>
+  <a href="mailto:bhasinhappy0506@gmail.com"><img src="https://img.shields.io/badge/Email-bhasinhappy0506%40gmail.com-D14836.svg?style=for-the-badge&logo=gmail&logoColor=white" alt="Email"></a>
+  <img src="https://img.shields.io/badge/Python-3.10%2B-3776AB.svg?style=for-the-badge&logo=python&logoColor=white" alt="Python">
+  <img src="https://img.shields.io/badge/FastAPI-0.100%2B-009688.svg?style=for-the-badge&logo=fastapi&logoColor=white" alt="FastAPI">
+  <img src="https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge" alt="License">
+</p>
+
 An end-to-end, production-grade document AI and invoice extraction system built with Python, PyMuPDF, EasyOCR, Pydantic, and FastAPI.
 
 The system extracts normalized, validated structured data from invoices with different layouts, label names, international PDF types (digital vector text, attached e-Way bills, multi-currency formats, European comma-decimal notation, and scanned image pages), table structures, and formatting conventions.
@@ -241,3 +250,21 @@ Run all tests across ground-truth files, international formats, and API edge cas
 - **Ambiguous Numeric Dates (e.g. `03/05/2025`):** When day and month are both $\le 12$, the engine flags ambiguity in `warnings` while applying regional convention (DMY).
 - **Multi-Document Scanned Bundles:** In scanned PDFs containing multiple distinct invoices (e.g. `highlighted.pdf`), the engine extracts the primary invoice and alerts the user to potential bundled documents.
 - **OCR Kerning / Spacing:** Minor OCR character joins (e.g. `COAL&COKES` vs `COAL & COKES`) are normalized semantically.
+
+---
+
+## Author & Engineering Attribution
+
+**Happy Bhasin**  
+Full Stack & AI Engineer | Amity University Madhya Pradesh (B.Tech CSE with Minor in AI/ML)  
+- **Email:** `bhasinhappy0506@gmail.com`
+- **Phone:** `+91 9220553665`
+- **LinkedIn:** [linkedin.com/in/happy-bhasin-908191267](https://www.linkedin.com/in/happy-bhasin-908191267)
+- **GitHub:** [github.com/Happybhai329](https://github.com/Happybhai329)
+
+---
+
+## License
+
+This project is open-source and distributed under the [MIT License](LICENSE).
+
