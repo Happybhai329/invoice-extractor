@@ -397,8 +397,16 @@
 
             // Badges
             const methodBadge = document.getElementById('methodBadge');
-            methodBadge.textContent = res.extraction_method === 'ocr' ? 'Scanned PDF (OCR)' : 'Digital Vector PDF';
-            methodBadge.className = 'badge ' + (res.extraction_method === 'ocr' ? 'badge-warning' : 'badge-info');
+            if (res.extraction_method === 'ai_assisted') {
+                methodBadge.textContent = 'AI-Assisted (Gemini Multimodal)';
+                methodBadge.className = 'badge badge-success';
+            } else if (res.extraction_method === 'ocr') {
+                methodBadge.textContent = 'Scanned PDF (OCR)';
+                methodBadge.className = 'badge badge-warning';
+            } else {
+                methodBadge.textContent = 'Digital Vector PDF';
+                methodBadge.className = 'badge badge-info';
+            }
 
             const confBadge = document.getElementById('confidenceBadge');
             const confPct = Math.round(res.confidence_score * 100);

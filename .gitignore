@@ -19,6 +19,11 @@ all_text_dump.txt
 ocr_highlighted_dump.txt
 benchmark_results.json
 
+# Environment & Secrets
+.env
+*.env
+.env.*
+
 # OS Metadata
 .DS_Store
 Thumbs.db
